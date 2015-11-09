@@ -157,7 +157,7 @@ size_t BaseInterface::compare()
         if(ig[i] != ig_answer[i]) return 5;
     for(size_t i = 0; i < gg.size(); i++)
         if(gg[i] != gg_answer[i]) return 6;
-    for(size_t i = 0; i < ig.size(); i++)
+    for(size_t i = 0; i < jg.size(); i++)
         if(jg[i] != jg_answer[i]) return 7;
 
     return 0;
