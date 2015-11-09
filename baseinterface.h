@@ -17,6 +17,9 @@ protected:
     vector<size_t> ig;
     vector<size_t> jg;
 
+    void convert_from_str(); // Необходимо переопределить в классе-потомке, если необходимо перевести данные в свой формат
+    void convert_to_str(); // Необходимо переопределить в классе-потомке, если необходимо перевести данные из своего формата в строчный
+
     //For Unit-test
     size_t size_answer;
     vector<int> gg_answer;
@@ -26,6 +29,7 @@ protected:
     bool read_from_file_service(string file_name, bool is_unit_test);
     bool read_answer_from_file(string file_name);
     size_t compare();
+    void clear();
     size_t test1();
     size_t test2();
     size_t test3();

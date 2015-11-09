@@ -43,6 +43,9 @@ bool BaseInterface::write_to_file(string file_name)
         out_file << endl;
     }
     out_file.close();
+
+    convert_to_str();
+
     return true;
 }
 
@@ -87,28 +90,56 @@ bool BaseInterface::read_from_file_service(string file_name, bool is_unit_test)
             ig.push_back(count);
     }
     in_file.close();
+
+    convert_from_str();
+
     if(count == 0)
         return false;
     return true;
 }
 
+void BaseInterface::convert_from_str()
+{
+    return;
+}
+
+void BaseInterface::convert_to_str()
+{
+    return;
+}
+
 size_t BaseInterface::run_tests()
 {
-    if(!test1() > 0)
+    if(test1() == 0)
         cout << "1\t[OK]" << endl;
     else
         cout << "1\t[FAIL]" << endl;
+    clear();
 
-    if(!test2() > 0)
+    if(test2() == 0)
         cout << "2\t[OK]" << endl;
     else
         cout << "2\t[FAIL]" << endl;
+    clear();
 
-    if(test3() > 0)
+    if(test3() == 0)
         cout << "3\t[OK]" << endl;
     else
         cout << "3\t[FAIL]" << endl;
+    clear();
     return 0;
+}
+
+void BaseInterface::clear()
+{
+    gg.clear();
+    ig.clear();
+    jg.clear();
+    size = 0;
+    gg_answer.clear();
+    ig_answer.clear();
+    jg_answer.clear();
+    size_answer = 0;
 }
 
 bool BaseInterface::read_answer_from_file(string file_name)
