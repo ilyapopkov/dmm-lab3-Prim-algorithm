@@ -184,7 +184,7 @@ bool BaseInterface::read_answer_from_file(string file_name, bool dense_matrix=fa
 
 size_t BaseInterface::compare()
 {
-    if(DenseMatrix.size() != 0) {
+    if(DenseMatrix.size() == 0) {
         if(size != size_answer) return 1;
         if(ig.size() != ig_answer.size()) return 2;
         if(gg.size() != gg_answer.size()) return 3;
