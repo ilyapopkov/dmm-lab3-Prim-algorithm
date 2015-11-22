@@ -9,6 +9,7 @@
 
 #include "baseinterface.h"
 
+#include "primBinTreeVSSS.h"
 #include "primSimpleDGPP.h"
 #include "primBinTreeDGPP.h"
 
@@ -87,7 +88,7 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
 
     xml.writeStartElement(file_name);
 
-    // Чтобы тест не расписовать, вот один прекрасный макрос.
+    // Чтобы тест не расписывать, вот один прекрасный макрос.
 #define one_test(x) try{\
     interface_class = new (x);\
     qDebug() << "\tTesting " << #x;\
@@ -102,6 +103,7 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
 
     one_test(PrimaBinTreeDGPP);
     one_test(PrimaSimpleDGPP);
+    one_test(PrimaBinTreeVSSS);
 
     xml.writeEndElement();
 }
@@ -110,29 +112,29 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
  *  Аргументы:
  *  0 - имя программы (стандартно)
  *  1 - надо ли выполнять генерацию тестов: 1 - надо, 0 - считаем, что сами тесты сгенерированы
- *  2... - по парно идёт слеудщая информация: на чётных местах размер теста, на нечётных - тип теста
+ *  2... - попарно идёт слеудщая информация: на чётных местах размер теста, на нечётных - тип теста
  */
 int main(int argc, char** argv)
 {
-     QFile file_results("results.xml");
-     file_results.open(QIODevice::WriteOnly);
+    QFile file_results("results.xml");
+    file_results.open(QIODevice::WriteOnly);
 
-     QXmlStreamWriter xml(&file_results);
-     xml.setAutoFormatting(true);
-     xml.writeStartDocument();
-     xml.writeStartElement("DMM");
+    QXmlStreamWriter xml(&file_results);
+    xml.setAutoFormatting(true);
+    xml.writeStartDocument();
+    xml.writeStartElement("DMM");
 
-     bool gen_test = (QString(argv[1]) == QString("1") ? true : false);
+    bool gen_test = (QString(argv[1]) == QString("1") ? true : false);
 
-     for (int argi = 2; argi < argc; argi += 2) {
-         int test_n = (argi-2)/2 + 1;
-         // Размер теста
-         int test_size = QString(argv[argi]).toInt();
-         QString test_type = QString(argv[argi+1]);
+    for (int argi = 2; argi < argc; argi += 2) {
+        int test_n = (argi-2)/2 + 1;
+        // Размер теста
+        int test_size = QString(argv[argi]).toInt();
+        QString test_type = QString(argv[argi+1]);
 
-         qDebug() << "Test " << test_n << ": " << test_size << " " << test_type;
+        qDebug() << "Test " << test_n << ": " << test_size << " " << test_type;
 
-         // Сформируем файл с тестовым графом
+        // Сформируем файл с тестовым графом
         QString test_file = QString("performance_") + QString::number(test_size) + QString("_") + test_type + QString(".txt");
         if (gen_test) {
             qDebug() << "\tCreating test matrix " << test_file;
@@ -140,12 +142,9 @@ int main(int argc, char** argv)
         }
         run_tests(xml, test_file);
         qDebug() << "Test ended";
+    }
 
-
-     }
-
-     xml.writeEndDocument();
-     file_results.close();
-     return 0;
+    xml.writeEndDocument();
+    file_results.close();
+    return 0;
 }
-

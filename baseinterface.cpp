@@ -162,13 +162,11 @@ size_t BaseInterface::run_tests()
     else
         cout << "1\t[FAIL]" << endl;
     clear();
-
     if(test2() == 0)
         cout << "2\t[OK]" << endl;
     else
         cout << "2\t[FAIL]" << endl;
     clear();
-
     if(test3() == 0)
         cout << "3\t[OK]" << endl;
     else
