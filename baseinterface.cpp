@@ -125,7 +125,8 @@ bool BaseInterface::read_from_file_service(string file_name, bool is_unit_test, 
         }
         in_file.close();
 
-        convert_from_str();
+        if(!is_unit_test)
+            convert_from_str();
 
         if(count == 0)
             return false;
@@ -161,6 +162,11 @@ size_t BaseInterface::run_tests()
         cout << "3\t[OK]" << endl;
     else
         cout << "3\t[FAIL]" << endl;
+
+    if(test4() == 0)
+        cout << "4\t[OK]" << endl;
+    else
+        cout << "4\t[FAIL]" << endl;
     clear();
     return 0;
 }
@@ -219,6 +225,7 @@ size_t BaseInterface::test2()
     bool dense = (DenseMatrix.size() > 0);
     read_from_file("UnitTests/test2.txt", dense);
     solve();
+    convert_to_str();
     read_answer_from_file("UnitTests/test2_answer.txt", dense);
     return compare();
 }
@@ -228,6 +235,17 @@ size_t BaseInterface::test3()
     bool dense = (DenseMatrix.size() > 0);
     read_from_file("UnitTests/test3.txt", dense);
     solve();
+    convert_to_str();
     read_answer_from_file("UnitTests/test3_answer.txt", dense);
+    return compare();
+}
+
+size_t BaseInterface::test4()
+{
+    bool dense = (DenseMatrix.size() > 0);
+    read_from_file("UnitTests/test4.txt", dense);
+    solve();
+    convert_to_str();
+    read_answer_from_file("UnitTests/test4_answer.txt", dense);
     return compare();
 }

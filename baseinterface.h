@@ -35,6 +35,7 @@ protected:
     size_t test1();
     size_t test2();
     size_t test3();
+    size_t test4();
 public:
 
     bool read_from_file(string file_nam, bool dense_matrix=false);
