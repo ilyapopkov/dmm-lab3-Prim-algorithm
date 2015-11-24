@@ -249,3 +249,21 @@ size_t BaseInterface::test4()
     read_answer_from_file("UnitTests/test4_answer.txt", dense);
     return compare();
 }
+
+
+double BaseInterface::run_performance_test(string file_name) {
+    read_from_file(file_name);
+
+    LARGE_INTEGER start, stop, timetime, fr;
+    double time;
+    QueryPerformanceFrequency(&fr);
+    QueryPerformanceCounter(&start);
+
+    solve();
+
+    QueryPerformanceCounter(&stop);
+    timetime.QuadPart = stop.QuadPart - start.QuadPart;
+    time = (double)timetime.QuadPart / (double)fr.QuadPart;
+
+    return time;
+}
