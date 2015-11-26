@@ -97,10 +97,13 @@ bool BaseInterface::read_from_file_service(string file_name, bool is_unit_test, 
             curr_size = size;
         }
         int tmp;
+        ig.resize(curr_size+1);
+        gg.reserve(curr_size*curr_size);
+        jg.reserve(curr_size*curr_size);
         if(is_unit_test)
             ig_answer.push_back(0);
         else
-            ig.push_back(0);
+            ig[0] = 0;
         int count = 0;
         for(size_t i = 0; i < curr_size; i++) {
             for(size_t j = 0; j < curr_size; j++) {
@@ -129,7 +132,7 @@ bool BaseInterface::read_from_file_service(string file_name, bool is_unit_test, 
             if(is_unit_test)
                 ig_answer.push_back(count);
             else
-                ig.push_back(count);
+                ig[i+1] = count;
         }
         in_file.close();
 
@@ -256,4 +259,32 @@ size_t BaseInterface::test4()
     convert_to_str();
     read_answer_from_file("UnitTests/test4_answer.txt", dense);
     return compare();
+}
+
+
+double BaseInterface::run_performance_test(string file_name) {
+    QString class_name = typeid(*this).name();
+    qDebug() << "\t\t" << class_name << " reading";
+    bool read_res =  read_from_file(file_name, false);
+    if (!read_res) {
+        qDebug() << "\t\tReading error!";
+        throw;
+    }
+    qDebug()  << "\t\t" << class_name << " solving";
+
+    LARGE_INTEGER start, stop, timetime, fr;
+    double time;
+    QueryPerformanceFrequency(&fr);
+    QueryPerformanceCounter(&start);
+
+    solve();
+
+    QueryPerformanceCounter(&stop);
+    timetime.QuadPart = stop.QuadPart - start.QuadPart;
+    time = (double)timetime.QuadPart / (double)fr.QuadPart;
+
+    qDebug()  << "\t\t" << class_name << " writing";
+    write_to_file(file_name + class_name.toStdString());
+
+    return time;
 }

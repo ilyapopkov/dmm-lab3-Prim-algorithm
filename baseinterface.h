@@ -5,8 +5,19 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <Windows.h>
+#include <typeinfo>
+#include <QDebug>
 
 using namespace std;
+
+/*
+ * Интерфейс, ввод и Юнит-тестирование:
+ * Александров М.Е.
+ * Жигалов П.С.
+ * Нейман Р.А.
+ * Трофимова С.А.
+*/
 
 
 class BaseInterface
@@ -39,11 +50,13 @@ protected:
 public:
 
     bool read_from_file(string file_nam, bool dense_matrix=false);
+    bool read_from_file_CR(string file_name, bool dense_matrix=false);      // Чтение в строчном формате
     bool write_to_file(string file_name, bool dense_matrix=false);
     virtual void solve() = 0;
 
     //For Unit-test
     size_t run_tests();
+    double run_performance_test(string file_name);
 };
 
 #endif // BASEINTERFACE_H
