@@ -87,7 +87,6 @@ bool BaseInterface::read_from_file_service(string file_name, bool is_unit_test, 
         }
     }
     else {
-
         size_t curr_size;
         if(is_unit_test) {
             in_file >> size_answer;
@@ -119,6 +118,15 @@ bool BaseInterface::read_from_file_service(string file_name, bool is_unit_test, 
                         jg.push_back(j);
                     }
                     count ++;
+                } else if(tmp == 0 && is_unit_test) {
+                    for(int k = ig[i]; k < ig[i+1]; k++) {
+                        if(jg[k] == j) {
+                            gg_answer.push_back(tmp);
+                            jg_answer.push_back(j);
+                            count ++;
+                            break;
+                        }
+                    }
                 }
             }
             if(is_unit_test)
