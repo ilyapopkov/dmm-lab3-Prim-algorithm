@@ -55,7 +55,7 @@ void create_performance_test (int test_size, QString test_type, QString file_nam
                         pos_value = el->second;
                     }
                     else {
-                        if (rand()%2)
+                        if (rand()%4)
                             pos_value = rand()%15 + 1;
                         else
                             pos_value = 0;
@@ -87,11 +87,16 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
     xml.writeStartElement(file_name);
 
     // Чтобы тест не расписовать, вот один прекрасный макрос.
-#define one_test(x) interface_class = new (x);\
+#define one_test(x) try{\
+    interface_class = new (x);\
     qDebug() << "\tTesting " << #x;\
     result = interface_class->run_performance_test(file_name.toStdString());\
     xml.writeTextElement(QString(#x), QString::number(result));\
-    delete interface_class
+    delete interface_class;\
+    }\
+    catch(...) {\
+        qDebug() << "\tERROR! On testing " << QString(#x);\
+    }
 
 
     one_test(PrimaBinTreeDGPP);
