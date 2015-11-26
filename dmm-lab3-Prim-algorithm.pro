@@ -1,11 +1,14 @@
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG -= qt
 
 SOURCES += main.cpp \
-    baseinterface.cpp
+    baseinterface.cpp \
+    primBinTreeDGPP.cpp \
+    primSampleDGPP.cpp
 
 HEADERS += \
-    baseinterface.h
+    baseinterface.h \
+    primBinTreeDGPP.h \
+    primSampleDGPP.h
 
