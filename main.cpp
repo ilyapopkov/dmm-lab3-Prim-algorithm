@@ -8,7 +8,8 @@
 #include <QDebug>
 
 #include "baseinterface.h"
-#include "primSampleDGPP.h"
+
+#include "primSimpleDGPP.h"
 #include "primBinTreeDGPP.h"
 
 using namespace std;
@@ -100,7 +101,7 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
 
 
     one_test(PrimaBinTreeDGPP);
-    one_test(PrimaSampleDGPP);
+    one_test(PrimaSimpleDGPP);
 
     xml.writeEndElement();
 }
