@@ -24,7 +24,7 @@ protected:
 private:
 
 	int N;
-	vector<multiset<Point>> treeQ;
+    vector<multiset<Point> > treeQ;
 	bool  *u;
 	vector<size_t> fullWalk;
 	void convert_from_str();

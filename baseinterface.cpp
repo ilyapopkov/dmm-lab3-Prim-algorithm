@@ -265,5 +265,7 @@ double BaseInterface::run_performance_test(string file_name) {
     timetime.QuadPart = stop.QuadPart - start.QuadPart;
     time = (double)timetime.QuadPart / (double)fr.QuadPart;
 
+    write_to_file(file_name + typeid(*this).name());
+
     return time;
 }
