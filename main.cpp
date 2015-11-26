@@ -55,7 +55,7 @@ void create_performance_test (int test_size, QString test_type, QString file_nam
                         pos_value = el->second;
                     }
                     else {
-                        if (rand()%4)
+                        if (rand()%4 == 0)
                             pos_value = rand()%15 + 1;
                         else
                             pos_value = 0;
