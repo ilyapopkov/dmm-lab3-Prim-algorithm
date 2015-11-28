@@ -27,7 +27,7 @@ struct rebro {
   rebro (pair<int, int> f, int ves) : f(f), ves(ves) {}
 };
 
-void PrimSimpleVSSS::solve() {
+void PrimaSimpleVSSS::solve() {
   vector<int> U = {0};
   vector<pair<int, int>> E = {};
   vector<pair<int, int>> F = {};

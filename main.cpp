@@ -9,9 +9,10 @@
 
 #include "baseinterface.h"
 
-#include "primBinTreeVSSS.h"
 #include "primSimpleDGPP.h"
 #include "primBinTreeDGPP.h"
+#include "primSimpleVSSS.h"
+#include "primBinTreeVSSS.h"
 
 using namespace std;
 
@@ -104,6 +105,7 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
     one_test(PrimaBinTreeDGPP);
     one_test(PrimaSimpleDGPP);
     one_test(PrimaBinTreeVSSS);
+    one_test(PrimaSimpleVSSS);
 
     xml.writeEndElement();
 }

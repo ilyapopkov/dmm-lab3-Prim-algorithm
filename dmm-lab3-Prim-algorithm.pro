@@ -8,10 +8,12 @@ SOURCES += main.cpp \
     baseinterface.cpp \
     primBinTreeDGPP.cpp \
     primSimpleDGPP.cpp \
-    primBinTreeVSSS.cpp
+    primBinTreeVSSS.cpp \
+    primSimpleVSSS.cpp
 
 HEADERS += \
     baseinterface.h \
     primBinTreeDGPP.h \
     primSimpleDGPP.h \
-    primBinTreeVSSS.h
+    primBinTreeVSSS.h \
+    primSimpleVSSS.h

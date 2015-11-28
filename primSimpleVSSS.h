@@ -3,7 +3,7 @@
 
 #include "baseinterface.h"
 
-class PrimSimpleVSSS : public BaseInterface {
+class PrimaSimpleVSSS : public BaseInterface {
 public:
   void solve () override final;
 };
