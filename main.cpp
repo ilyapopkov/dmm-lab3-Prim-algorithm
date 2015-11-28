@@ -144,9 +144,11 @@ int main(int argc, char** argv)
         }
         run_tests(xml, test_file);
         qDebug() << "Test ended";
+        file_results.flush();
     }
 
     xml.writeEndDocument();
+
     file_results.close();
     return 0;
 }
