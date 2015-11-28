@@ -75,6 +75,5 @@ void PrimaSimpleVSSS::solve() {
     }
   }
 
-
   return;
 }

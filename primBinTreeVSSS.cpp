@@ -1,5 +1,7 @@
 #include "primBinTreeVSSS.h"
 
+#include <set>
+
 void PrimaBinTreeVSSS::solve()
 {
     //вершина u предок для i вершины, т.ч. (i,u) - мин. ребро

@@ -1,5 +1,11 @@
 #include "baseinterface.h"
-#include <set>
+
+/*
+ * Vaytsel
+ * Sarychev
+ * Stepanova
+ * Sayfullaeva
+ */
 
 class PrimaBinTreeVSSS: public BaseInterface{
     const int INF = 2000000000;
