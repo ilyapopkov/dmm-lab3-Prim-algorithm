@@ -95,6 +95,7 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
 #define one_test(x) try{\
     interface_class = new (x);\
     qDebug() << "\tTesting " << #x;\
+    interface_class->run_tests();\
     result = interface_class->run_performance_test(file_name.toStdString());\
     xml.writeTextElement(QString(#x), QString::number(result));\
     delete interface_class;\
@@ -103,12 +104,11 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
         qDebug() << "\tERROR! On testing " << QString(#x);\
     }
 
-
     one_test(PrimaBinTreeDGPP);
     one_test(PrimaSimpleDGPP);
 
     one_test(PrimaBinTreeVSSS);
- //   one_test(PrimaSimpleVSSS);
+    one_test(PrimaSimpleVSSS);
 
     one_test(PrimaBinTreeV);
     one_test(PrimaUnknownV);
@@ -124,6 +124,7 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
  */
 int main(int argc, char** argv)
 {
+
     QFile file_results("results.xml");
     file_results.open(QIODevice::WriteOnly);
 

@@ -4,6 +4,7 @@
 
 void PrimaBinTreeVSSS::solve()
 {
+     int INF = 2000000000;
     //вершина u предок для i вершины, т.ч. (i,u) - мин. ребро
     vector<int> key(size, INF), p(size, -1);
     vector<int> gg1(gg.size(), 0);
