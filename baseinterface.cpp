@@ -137,7 +137,7 @@ size_t BaseInterface::run_tests()
         cout << "3\t[OK]" << endl;
     else
         cout << "3\t[FAIL]" << endl;
-
+    clear();
     if(test4() == 0)
         cout << "4\t[OK]" << endl;
     else
@@ -230,7 +230,9 @@ double BaseInterface::run_performance_test(string file_name) {
     QueryPerformanceFrequency(&fr);
     QueryPerformanceCounter(&start);
 
+    convert_from_str();
     solve();
+    convert_to_str();
 
     QueryPerformanceCounter(&stop);
     timetime.QuadPart = stop.QuadPart - start.QuadPart;
