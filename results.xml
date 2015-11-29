@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DMM>
+    <performance_1000_RAND.txt>
+        <PrimaBinTreeDGPP>0.175814</PrimaBinTreeDGPP>
+        <PrimaSimpleDGPP>0.108146</PrimaSimpleDGPP>
+        <PrimaBinTreeVSSS>0.00561538</PrimaBinTreeVSSS>
+    </performance_1000_RAND.txt>
     <performance_2000_RAND.txt>
-        <PrimaBinTreeDGPP>0.809757</PrimaBinTreeDGPP>
-        <PrimaSampleDGPP>0.601321</PrimaSampleDGPP>
+        <PrimaBinTreeDGPP>1.04234</PrimaBinTreeDGPP>
+        <PrimaSimpleDGPP>0.711619</PrimaSimpleDGPP>
+        <PrimaBinTreeVSSS>0.0138083</PrimaBinTreeVSSS>
     </performance_2000_RAND.txt>
     <performance_4000_RAND.txt>
-        <PrimaBinTreeDGPP>4.78625</PrimaBinTreeDGPP>
-        <PrimaSampleDGPP>4.41784</PrimaSampleDGPP>
+        <PrimaBinTreeDGPP>5.82853</PrimaBinTreeDGPP>
+        <PrimaSimpleDGPP>4.90638</PrimaSimpleDGPP>
+        <PrimaBinTreeVSSS>0.0503725</PrimaBinTreeVSSS>
     </performance_4000_RAND.txt>
-    <performance_8000_RAND.txt>
-        <PrimaBinTreeDGPP>36.7826</PrimaBinTreeDGPP>
-        <PrimaSampleDGPP>46.4738</PrimaSampleDGPP>
-    </performance_8000_RAND.txt>
 </DMM>

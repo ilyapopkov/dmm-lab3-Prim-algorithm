@@ -28,9 +28,11 @@ struct rebro {
 };
 
 void PrimaSimpleVSSS::solve() {
-  vector<int> U = {0};
-  vector<pair<int, int>> E = {};
-  vector<pair<int, int>> F = {};
+  vector<int> U;
+  vector<pair<int, int>> E;
+  vector<pair<int, int>> F;
+
+  U.push_back(0);
 
   for (int i = 0; i < size; i++) {
     for (int j = ig[i]; j < ig[i + 1]; j++) {

@@ -48,7 +48,6 @@ protected:
 public:
 
     bool read_from_file(string file_nam);
-    bool read_from_file_CR(string file_name);      // Чтение в строчном формате
     bool write_to_file(string file_name);
     virtual void solve() = 0;
 

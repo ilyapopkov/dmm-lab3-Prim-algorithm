@@ -8,7 +8,7 @@
  */
 
 class PrimaBinTreeVSSS: public BaseInterface{
-    const int INF = 2000000000;
+    static const int INF = 2000000000;
 public:
     void solve();
 };
