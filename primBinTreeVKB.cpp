@@ -1,6 +1,6 @@
-#include "primBinTreeV.h"
+#include "primBinTreeVKB.h"
 
-void PrimaBinTreeV::solve()
+void PrimaBinTreeVKB::solve()
 {
 	int to = 0; 
 	int v = 0;
@@ -42,10 +42,10 @@ void PrimaBinTreeV::solve()
 		v = q.begin()->second;
 		q.erase(q.begin());
 	}
-	convert_to_str();
+//	convert_to_str();
 }
 
-void PrimaBinTreeV::convert_to_str()
+void PrimaBinTreeVKB::convert_to_str()
 {
 	ig.clear();
 	jg.clear();

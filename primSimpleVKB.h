@@ -1,16 +1,19 @@
 #define NOMINMAX
 
 #include "baseinterface.h"
-#include <set>
 #include <limits>
+/*
+ * Волк
+ * Кислицын
+ * Бублей
+ */
 
-class PrimaBinTreeV : public BaseInterface
+class PrimaSimpleVKB: public BaseInterface
 {
 protected:
 
 	int *b;
 	int *rebro;
-	set<pair<int, int>> q;
 public:
 	void solve();
 	void convert_to_str();

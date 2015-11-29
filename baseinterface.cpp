@@ -239,7 +239,7 @@ double BaseInterface::run_performance_test(string file_name) {
     time = (double)timetime.QuadPart / (double)fr.QuadPart;
 
     qDebug()  << "\t\t" << class_name << " writing";
-    write_to_file(file_name + class_name.toStdString());
+  // write_to_file(file_name + class_name.toStdString());
 
     return time;
 }

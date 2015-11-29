@@ -1,5 +1,5 @@
-#include "primUnknownV.h"
-void PrimaUnknownV::solve()
+#include "primSimpleVKB.h"
+void PrimaSimpleVKB::solve()
 {
 	bool *check;
 	int i, j, nmin,min;
@@ -45,9 +45,9 @@ void PrimaUnknownV::solve()
 			}
 		}
 	}
-	convert_to_str();
+//	convert_to_str();
 }
-void PrimaUnknownV::convert_to_str()
+void PrimaSimpleVKB::convert_to_str()
 {
 	ig.clear();
 	jg.clear();

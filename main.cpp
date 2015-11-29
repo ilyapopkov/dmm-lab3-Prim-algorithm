@@ -13,8 +13,8 @@
 #include "primBinTreeDGPP.h"
 #include "primSimpleVSSS.h"
 #include "primBinTreeVSSS.h"
-#include "primUnknownV.h"
-#include "primBinTreeV.h"
+#include "primSimpleVKB.h"
+#include "primBinTreeVKB.h"
 
 using namespace std;
 
@@ -95,7 +95,6 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
 #define one_test(x) try{\
     interface_class = new (x);\
     qDebug() << "\tTesting " << #x;\
-    interface_class->run_tests();\
     result = interface_class->run_performance_test(file_name.toStdString());\
     xml.writeTextElement(QString(#x), QString::number(result));\
     delete interface_class;\
@@ -110,8 +109,8 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
     one_test(PrimaBinTreeVSSS);
     one_test(PrimaSimpleVSSS);
 
-    one_test(PrimaBinTreeV);
-    one_test(PrimaUnknownV);
+    one_test(PrimaBinTreeVKB);
+    one_test(PrimaSimpleVKB);
 
     xml.writeEndElement();
 }
