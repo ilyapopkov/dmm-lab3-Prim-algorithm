@@ -54,6 +54,7 @@ public:
     //For Unit-test
     size_t run_tests();
     double run_performance_test(string file_name);
+
 };
 
 #endif // BASEINTERFACE_H

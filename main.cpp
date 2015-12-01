@@ -17,16 +17,20 @@
 #include "primBinTreeVKB.h"
 
 using namespace std;
-
-void create_performance_test (int test_size, QString test_type, QString file_name ) {
+// test_size_v - количество узлов
+// test_size_e - количество рёбер
+void create_performance_test (int test_size_v, int test_size_e, QString test_type, QString file_name ) {
 
     ofstream outp_file(file_name.toStdString().c_str());
-    outp_file << test_size << endl;
+    outp_file << test_size_v << endl;
 
+    int edges_count = 0;
+
+   // В простейшем тесте рёбер всегда 2 * test_size_v, он не интересен
    if (test_type == QString("SIMPLE")) {
        int pos_value;
-       for(int i = 0; i < test_size; i++) {
-        for(int j = 0; j < test_size; j++) {
+       for(int i = 0; i < test_size_v; i++) {
+        for(int j = 0; j < test_size_v; j++) {
             if (j == i + 1 || j == i-1)
                pos_value = 1;
             else
@@ -38,39 +42,65 @@ void create_performance_test (int test_size, QString test_type, QString file_nam
        }
    }
    else if (test_type == QString("RAND") || test_type == QString("FULL")) {
-       map<string, int> values;
-       string key;
+       map<QString, int> values;
+       QString key;
        int pos_value;
-       for(int i = 0; i < test_size; i++) {
-        for(int j = 0; j < test_size; j++) {
+       int full_e = (test_size_v - 1)* test_size_v / 2;
+       int e_i = 0;
 
+       qDebug() << "\t\tGenerating test " << test_size_v << " " << test_size_v;
+       for(int i = 0; i < test_size_v; i++) {
+           int row_edge_n = 0;
+        for(int j = 0; j < test_size_v; j++) {
+
+
+            int edges_left = full_e - e_i;
+            int edges_left_add = test_size_e - edges_count;
+            if (i < j)
+                e_i++;
+
+            int min_i = std::max(i, j);
+            int max_i = std::min(i, j);
+           // qDebug() << i << " " << j << "\t\tLeft edges: " << edges_left << " not zero edges " << edges_count;
             if (i == j)
                 pos_value = 0;
             else {
 
-                key = i + "#" + j;
-                map<string, int>::iterator el = values.find(key);
+                key = QString::number(min_i) + "#" + QString::number(max_i);
+                map<QString, int>::iterator el = values.find(key);
+
+                //qDebug() << "\t\tKey" << i << " " << j << " " << key;
+
                 if (el != values.end()) {
+                  //  qDebug() << "\t\tExists 1!";
                     pos_value = el->second;
                 }
                 else {
-                    key = i + "#" + j;
-                    el != values.find(key);
-                    if (el != values.end()) {
-                        pos_value = el->second;
+                    bool add_edge;
+                    if(j == test_size_v - 1 && row_edge_n == 0) {
+                         add_edge = true;
+                       //  qDebug() << "\t\tZero row i = " << i << " j = " << j << " row_count = " << row_edge_n;
                     }
-                    else {
-                        if (rand()%4 == 0)
-                            pos_value = rand()%15 + 1;
-                        else
-                            pos_value = 0;
+                    else
+                        add_edge = (rand()%4 == 0 || edges_left <= edges_left_add) && edges_count <= test_size_e;
 
-                        if (test_type == QString("FULL"))
-                            pos_value++;
-                        values[key] = pos_value;
+                    // qDebug() << "\t\tG Left edges: " << edges_left << " not zero edges " << edges_count << " size: " << test_size_e << " left to build: " << edges_left_add;
+                     if (add_edge)  {
+                         pos_value = rand()%15 + 1;
+                         edges_count++;
 
-                    }
+                     }
+                     else
+                         pos_value = 0;
+
+                     if (test_type == QString("FULL"))
+                         pos_value++;
+                     if (pos_value != 0)
+                         row_edge_n++;
+                     values[key] = pos_value;
+
                 }
+
             }
 
              outp_file << pos_value << " ";
@@ -80,12 +110,14 @@ void create_performance_test (int test_size, QString test_type, QString file_nam
        }
    }
 
+   qDebug()  << "\t\tEdges: " << edges_count;
+
    outp_file.close();
 }
 
 
 
-void run_tests(QXmlStreamWriter& xml, QString file_name) {
+/*void run_tests(QXmlStreamWriter& xml, QString file_name) {
     BaseInterface* interface_class;
     double result;
 
@@ -114,12 +146,25 @@ void run_tests(QXmlStreamWriter& xml, QString file_name) {
 
     xml.writeEndElement();
 }
+*/
+
+template<typename test_subj_type>
+void run_performance_tests(string test_name, ifstream& outp, int test_v, int test_e) {
+
+   for(auto& test_iter : test_names) {
+         BaseInterface* interface_class = new test_subj_type;
+         double result = interface_class->run_performance_test(test_name);
+         outp << test_v << ";" << test_e << ";" << result << endl;
+
+   }
+
+}
 
 /*
  *  Аргументы:
  *  0 - имя программы (стандартно)
  *  1 - надо ли выполнять генерацию тестов: 1 - надо, 0 - считаем, что сами тесты сгенерированы
- *  2... - попарно идёт слеудщая информация: на чётных местах размер теста, на нечётных - тип теста
+ *  2... - по тройкам идёт следущая информация: количество узлов, количество рёбер, на нечётных - тип теста
  */
 int main(int argc, char** argv)
 {
@@ -134,22 +179,28 @@ int main(int argc, char** argv)
 
     bool gen_test = (QString(argv[1]) == QString("1") ? true : false);
 
-    for (int argi = 2; argi < argc; argi += 2) {
-        int test_n = (argi-2)/2 + 1;
-        // Размер теста
-        int test_size = QString(argv[argi]).toInt();
-        QString test_type = QString(argv[argi+1]);
+    const int agr_per_test = 3;
 
-        qDebug() << "Test " << test_n << ": " << test_size << " " << test_type;
+    vector<string> test_files;
+
+    for (int argi = 2; argi < argc; argi += agr_per_test) {
+        int test_n = (argi-agr_per_test)/agr_per_test + 1;
+        // Размер теста
+        int test_size_v = QString(argv[argi]).toInt();
+        int test_size_e = QString(argv[argi+1]).toInt();
+        QString test_type = QString(argv[argi+2]);
+
+        qDebug() << "Test " << test_n << ": " << test_size_v << " "<< test_size_e << " " << test_type;
 
         // Сформируем файл с тестовым графом
-        QString test_file = QString("performance_") + QString::number(test_size) + QString("_") + test_type + QString(".txt");
+        QString test_file = QString("performance_") + QString::number(test_size_v) + QString("_") + QString::number(test_size_e) + "_" + test_type + QString(".txt");
+        test_files.push_back(test_file.toStdString());
         if (gen_test) {
             qDebug() << "\tCreating test matrix " << test_file;
-            create_performance_test(test_size, test_type, test_file);
+            create_performance_test(test_size_v, test_size_e, test_type, test_file);
         }
-        run_tests(xml, test_file);
-        qDebug() << "Test ended";
+       // run_tests(xml, test_file);
+        qDebug() << "Test generation ended";
         file_results.flush();
     }
 
