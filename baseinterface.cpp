@@ -224,19 +224,19 @@ double BaseInterface::run_performance_test(string file_name) {
         throw;
     }
     qDebug()  << "\t\t" << class_name << " solving";
+	convert_from_str();
 
     LARGE_INTEGER start, stop, timetime, fr;
     double time;
     QueryPerformanceFrequency(&fr);
     QueryPerformanceCounter(&start);
-
-    convert_from_str();
     solve();
-    convert_to_str();
 
     QueryPerformanceCounter(&stop);
     timetime.QuadPart = stop.QuadPart - start.QuadPart;
     time = (double)timetime.QuadPart / (double)fr.QuadPart;
+	
+	convert_to_str();
 
     qDebug()  << "\t\t" << class_name << " writing";
   // write_to_file(file_name + class_name.toStdString());
