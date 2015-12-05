@@ -1,8 +1,6 @@
 #include <iostream>
 
 #include <fstream>
-#include <QFile>
-#include <QXmlStreamWriter>
 #include <map>
 #include <QString>
 #include <QDebug>
@@ -59,8 +57,8 @@ void create_performance_test (int test_size_v, int test_size_e, QString test_typ
             if (i < j)
                 e_i++;
 
-            int min_i = std::max(i, j);
-            int max_i = std::min(i, j);
+            int min_i = max(i, j);
+            int max_i = min(i, j);
            // qDebug() << i << " " << j << "\t\tLeft edges: " << edges_left << " not zero edges " << edges_count;
             if (i == j)
                 pos_value = 0;
@@ -116,47 +114,36 @@ void create_performance_test (int test_size_v, int test_size_e, QString test_typ
 }
 
 
+struct test_info {
+    string test_name;
+    int test_v;
+    int test_e;
 
-/*void run_tests(QXmlStreamWriter& xml, QString file_name) {
-    BaseInterface* interface_class;
-    double result;
-
-    xml.writeStartElement(file_name);
-
-    // Чтобы тест не расписывать, вот один прекрасный макрос.
-#define one_test(x) try{\
-    interface_class = new (x);\
-    qDebug() << "\tTesting " << #x;\
-    result = interface_class->run_performance_test(file_name.toStdString());\
-    xml.writeTextElement(QString(#x), QString::number(result));\
-    delete interface_class;\
-    }\
-    catch(...) {\
-        qDebug() << "\tERROR! On testing " << QString(#x);\
+    test_info(QString s, int v, int e) {
+        test_name = s.toStdString();
+        test_v = v;
+        test_e = e;
     }
 
-    one_test(PrimaBinTreeDGPP);
-    one_test(PrimaSimpleDGPP);
+};
 
-    one_test(PrimaBinTreeVSSS);
-    one_test(PrimaSimpleVSSS);
-
-    one_test(PrimaBinTreeVKB);
-    one_test(PrimaSimpleVKB);
-
-    xml.writeEndElement();
-}
-*/
 
 template<typename test_subj_type>
-void run_performance_tests(string test_name, ifstream& outp, int test_v, int test_e) {
+void run_performance_tests(vector<test_info>& tests, ofstream& outp) {
 
-   for(auto& test_iter : test_names) {
+    outp << typeid(test_subj_type).name() << ";" <<  endl;
+    qDebug() << "Testing " << typeid(test_subj_type).name();
+
+   for(auto& test : tests) {
+        qDebug() << "\t"  << test.test_name.c_str();
          BaseInterface* interface_class = new test_subj_type;
-         double result = interface_class->run_performance_test(test_name);
+         double result = interface_class->run_performance_test(test.test_name);
          outp << test_v << ";" << test_e << ";" << result << endl;
 
    }
+
+   outp << endl;
+   outp.flush();
 
 }
 
@@ -164,48 +151,55 @@ void run_performance_tests(string test_name, ifstream& outp, int test_v, int tes
  *  Аргументы:
  *  0 - имя программы (стандартно)
  *  1 - надо ли выполнять генерацию тестов: 1 - надо, 0 - считаем, что сами тесты сгенерированы
- *  2... - по тройкам идёт следущая информация: количество узлов, количество рёбер, на нечётных - тип теста
+ *  2 - имя файла, где хранится информация о тестах
  */
 int main(int argc, char** argv)
 {
 
-    QFile file_results("results.xml");
-    file_results.open(QIODevice::WriteOnly);
-
-    QXmlStreamWriter xml(&file_results);
-    xml.setAutoFormatting(true);
-    xml.writeStartDocument();
-    xml.writeStartElement("DMM");
 
     bool gen_test = (QString(argv[1]) == QString("1") ? true : false);
 
-    const int agr_per_test = 3;
+    ifstream test_file(argv[2]);
 
-    vector<string> test_files;
+    vector<test_info> tests;
+    int test_n = 0;
 
-    for (int argi = 2; argi < argc; argi += agr_per_test) {
-        int test_n = (argi-agr_per_test)/agr_per_test + 1;
+    while (!test_file.eof()) {
+        test_n++;
         // Размер теста
-        int test_size_v = QString(argv[argi]).toInt();
-        int test_size_e = QString(argv[argi+1]).toInt();
-        QString test_type = QString(argv[argi+2]);
+        int test_size_v;
+        int test_size_e;
+        string test_type_std;
 
+        test_file >> test_size_v >> test_size_e >> test_type_std;
+
+        QString test_type = QString(test_type_std.c_str());
         qDebug() << "Test " << test_n << ": " << test_size_v << " "<< test_size_e << " " << test_type;
 
         // Сформируем файл с тестовым графом
         QString test_file = QString("performance_") + QString::number(test_size_v) + QString("_") + QString::number(test_size_e) + "_" + test_type + QString(".txt");
-        test_files.push_back(test_file.toStdString());
+
+        tests.push_back(test_info(test_file, test_size_v, test_size_e));
+
         if (gen_test) {
             qDebug() << "\tCreating test matrix " << test_file;
             create_performance_test(test_size_v, test_size_e, test_type, test_file);
         }
-       // run_tests(xml, test_file);
         qDebug() << "Test generation ended";
-        file_results.flush();
     }
 
-    xml.writeEndDocument();
+    ofstream outp("results.cvs");
 
-    file_results.close();
+    run_performance_tests<PrimaSimpleDGPP>(tests, outp);
+    run_performance_tests<PrimaSimpleVKB>(tests, outp);
+    run_performance_tests<PrimaSimpleVSSS>(tests, outp);
+
+
+    run_performance_tests<PrimaBinTreeDGPP>(tests, outp);
+    run_performance_tests<PrimaBinTreeVKB>(tests, outp);
+    run_performance_tests<PrimaBinTreeVSSS>(tests, outp);
+
+    outp.close();
+
     return 0;
 }
