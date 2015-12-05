@@ -138,7 +138,7 @@ void run_performance_tests(vector<test_info>& tests, ofstream& outp) {
         qDebug() << "\t"  << test.test_name.c_str();
          BaseInterface* interface_class = new test_subj_type;
          double result = interface_class->run_performance_test(test.test_name);
-         outp << test_v << ";" << test_e << ";" << result << endl;
+         outp << test.test_v << ";" << test.test_e << ";" << result << endl;
 
    }
 
@@ -155,7 +155,8 @@ void run_performance_tests(vector<test_info>& tests, ofstream& outp) {
  */
 int main(int argc, char** argv)
 {
-
+    if (argc != 3)
+        throw;
 
     bool gen_test = (QString(argv[1]) == QString("1") ? true : false);
 
