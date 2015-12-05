@@ -140,6 +140,8 @@ void run_performance_tests(vector<test_info>& tests, ofstream& outp) {
          double result = interface_class->run_performance_test(test.test_name);
          outp << test.test_v << ";" << test.test_e << ";" << result << endl;
 
+         delete interface_class;
+
    }
 
    outp << endl;
@@ -201,6 +203,8 @@ int main(int argc, char** argv)
     run_performance_tests<PrimaBinTreeVSSS>(tests, outp);
 
     outp.close();
+
+    qDebug() << "Tests ended";
 
     return 0;
 }
