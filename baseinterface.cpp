@@ -243,3 +243,4 @@ double BaseInterface::run_performance_test(string file_name) {
 
     return time;
 }
+
