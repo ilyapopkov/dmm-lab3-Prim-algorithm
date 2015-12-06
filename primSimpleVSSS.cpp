@@ -1,53 +1,26 @@
 #include "primSimpleVSSS.h"
-
 #include <vector>
-
 void PrimaSimpleVSSS::solve () {
-  vector<bool> you_in_ostov (size, false);
-  you_in_ostov[0] = true;
-
-  for (int i = 0; i < size; i++) {
-    for (int j = ig[i]; j < ig[i + 1]; j++) {
-      int jj = jg[j];
-      if (jj == i) {
-        gg[j] = 0;
+  vector<bool> you_in_ostov (size, false); you_in_ostov[0] = true;
+  vector<int> b(size, INT_MAX); b[0] = 0;
+  rebra.clear(); rebra.resize(size, -1); rebra[0] = 0;
+  for(int _ = 0, v = 0; _ < size; _++) {
+    for (int j = ig[v]; j < ig[v + 1]; j++)
+      if (!you_in_ostov[jg[j]] && gg[j] < b[jg[j]]) {
+        b[jg[j]] = gg[j]; rebra[jg[j]] = v;
       }
-    }
+    for (int l = 0, min = INT_MAX; l < size; l++)
+      if (!you_in_ostov[l] && b[l] < min) {
+        min = b[l]; v = l;
+      }
+    you_in_ostov[v] = true;
   }
-
-  int count = 1;
-  int v1, v2, minves;
-  while (count != size) {
-    v1 = 0;
-    v2 = 0;
-    minves = INT_MAX;
-
-    for (int i = 0; i < size; i++) {
-      if (you_in_ostov[i]) {
-        for (int j = ig[i]; j < ig[i + 1]; j++) {
-          if (!you_in_ostov[jg[j]] && minves > gg[j]) {
-            v1 = i;
-            v2 = jg[j];
-            minves = gg[j];
-          }
-        }
-      }
-    }
-
-    you_in_ostov[v2] = true;
-
-    for (int i = 0; i < size; i++) {
-      if (you_in_ostov[i]) {
-        for (int j = ig[i]; j < ig[i + 1]; j++) {
-          int jj = jg[j];
-          if (i != v1 && jj == v2) gg[j] = 0;
-          if (you_in_ostov[jj] && jj != v1 && i == v2) gg[j] = 0;
-        }
-      }
-    }
-
-    count++;
-  }
-
-  return;
+}
+void PrimaSimpleVSSS::convert_to_str() {
+    for (int i = 0; i < size; i++)
+      for (int j = ig[i]; j < ig[i + 1]; j++)
+        if (jg[j] == i) gg[j] = 0;
+    for(int i = 0; i < size; i++)
+      for(int j = ig[i]; j < ig[i+1]; j++)
+        if(rebra[i] != jg[j] && rebra[jg[j]] != i) gg[j] = 0;
 }
