@@ -182,7 +182,9 @@ size_t BaseInterface::compare()
 size_t BaseInterface::test1()
 {
     read_from_file("UnitTests/test1.txt");
+    convert_from_str();
     solve();
+    convert_to_str();
     read_answer_from_file("UnitTests/test1_answer.txt");
     return compare();
 }
@@ -190,6 +192,7 @@ size_t BaseInterface::test1()
 size_t BaseInterface::test2()
 {
     read_from_file("UnitTests/test2.txt");
+    convert_from_str();
     solve();
     convert_to_str();
     read_answer_from_file("UnitTests/test2_answer.txt");
@@ -199,6 +202,7 @@ size_t BaseInterface::test2()
 size_t BaseInterface::test3()
 {
     read_from_file("UnitTests/test3.txt");
+    convert_from_str();
     solve();
     convert_to_str();
     read_answer_from_file("UnitTests/test3_answer.txt");
@@ -208,6 +212,7 @@ size_t BaseInterface::test3()
 size_t BaseInterface::test4()
 {
     read_from_file("UnitTests/test4.txt");
+    convert_from_str();
     solve();
     convert_to_str();
     read_answer_from_file("UnitTests/test4_answer.txt");
