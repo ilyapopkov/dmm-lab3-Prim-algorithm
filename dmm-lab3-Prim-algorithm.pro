@@ -3,6 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 
 CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp \
     baseinterface.cpp \
@@ -10,8 +11,8 @@ SOURCES += main.cpp \
     primSimpleDGPP.cpp \
     primBinTreeVSSS.cpp \
     primSimpleVSSS.cpp \
-    primUnknownV.cpp \
-    primBinTreeV.cpp
+    primSimpleVKB.cpp \
+    primBinTreeVKB.cpp
 
 HEADERS += \
     baseinterface.h \
@@ -20,4 +21,6 @@ HEADERS += \
     primBinTreeVSSS.h \
     primSimpleVSSS.h \
     primUnknownV.h \
-    primBinTreeV.h
+    primBinTreeV.h \
+    primSimpleVKB.h \
+    primBinTreeVKB.h
