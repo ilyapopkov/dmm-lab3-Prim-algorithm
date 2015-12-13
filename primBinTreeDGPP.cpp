@@ -16,7 +16,7 @@ void PrimaBinTreeDGPP::convert_from_str()
 	{
 		for (int j = ig[i]; j < ig[i + 1]; j++)
 		{
-			tempSet.insert(*(new Point(gg[j], jg[j])));
+			tempSet.insert(*(new Point(gg[j], jg[j], i)));
 		}
 		if (tempSet.size() > 0)
 		{
@@ -25,7 +25,7 @@ void PrimaBinTreeDGPP::convert_from_str()
 		tempSet.clear();
 	}
 
- 	for (int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 	{
 		u[i] = 0;
 	}
@@ -36,53 +36,42 @@ void PrimaBinTreeDGPP::solve()
 	vector<int> gg_temp;
 	vector<size_t> ig_temp;
 	vector<size_t> jg_temp(jg.size());
-	 
+
 	fullWalk.push_back(0);
 	u[0] = 1;
 	d[0] = 0;
-	while (fullWalk.size() < N)
+	if (treeQ.size()!= 0)
 	{
-		int  minN = -1;
-		int  minV = INT_MAX;
-		int index1 = 0;
-		int index2 = 0;
-		for (int i = 0; i < fullWalk.size(); i++)
-		{
-			std::multiset<Point>::iterator it;
-			if (treeQ[fullWalk[i]].size() > 0)
-			{
-				it = treeQ[fullWalk[i]].begin();
-				index1 = 0;
-				while (u[(*it).number_point])
-				{
-					if (index1 >= treeQ[fullWalk[i]].size()-1)
-					{
-						break;
-					}
-					it++;
-					index1++;
-				}
-				Point h = *it;
-				if ((h.weight < minV) && (!u[h.number_point]))
-				{
-					minV = h.weight;
-					minN = fullWalk[i];
-					index2 = index1;
-				}
-			}
-		}
-		std::multiset<Point>::iterator it;
-		it = treeQ[minN].begin();
-		std::advance(it, index2);
-		int k = (*it).number_point;
-		treeQ[minN].erase(it);
-		fullWalk.push_back(k);
-		p[k] = minN;
-		d[k] = minV;
-		u[k] = true;
-		//cout << k << endl;
-	}
 
+		addPointSort(treeQ[0]);
+		while (fullWalk.size() < N)
+		{
+			std::multiset<Point>::iterator it1;
+			while (sortPoint.size() > 0)
+			{
+				it1 = sortPoint.begin();
+				if (!u[(*it1).number_point])
+				{
+					break;
+					
+				} 
+				sortPoint.erase(it1);
+			}
+			if (sortPoint.size() == 0)
+			{
+				break;
+			}
+			fullWalk.push_back((*it1).number_point);
+			p[(*it1).number_point] = (*it1).parentPoint;
+			d[(*it1).number_point] = (*it1).weight;
+			u[(*it1).number_point] = true;
+			int n = (*it1).number_point;
+			sortPoint.erase(it1);
+			addPointSort(treeQ[n]);
+
+			
+		}
+	}
 }
 
 void PrimaBinTreeDGPP::convert_to_str()
@@ -141,6 +130,15 @@ void PrimaBinTreeDGPP::convert_to_str()
 			}
 		}
 	}
+
+}
+
+void PrimaBinTreeDGPP::addPointSort(multiset<Point> points)
+{
+	if (points.size() > 0)
+	{
+		sortPoint.insert(points.begin(), points.end());
+	}
 }
 
 void PrimaBinTreeDGPP::clear()
@@ -150,6 +148,7 @@ void PrimaBinTreeDGPP::clear()
 	d.clear();
 	delete[] u;
 	treeQ.clear();
+	sortPoint.clear();
 }
 
 bool PrimaBinTreeDGPP::Point::operator < (const PrimaBinTreeDGPP::Point & t) const
