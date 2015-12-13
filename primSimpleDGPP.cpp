@@ -1,63 +1,81 @@
-#include "primSimpleDGPP.h"
+#include"primSimpleDGPP.h"
+
 
 
 void PrimaSimpleDGPP::convert_from_str()
 {
-	 p = vector<int>(ig.size() - 1, -1);
-	 d = vector<int>(ig.size() - 1, INT_MAX);
+	clear();
+	N = ig.size() - 1;
+	p = vector<int>(N, -1);
+	d = vector<int>(N, INT_MAX);
+	u = new bool[N];
+	multiset<Point> tempSet;
+	size_t ind[2];
+	ind[0] = 0;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = ig[i]; j < ig[i + 1]; j++)
+		{
+			tempSet.insert(*(new Point(gg[j], jg[j])));
+		}
+		if (tempSet.size() > 0)
+		{
+			treeQ.push_back(tempSet);
+		}
+		tempSet.clear();
+	}
+
+ 	for (int i = 0; i < N; i++)
+	{
+		u[i] = 0;
+	}
 }
 
 void PrimaSimpleDGPP::solve()
 {
-
-	vector<bool> u(ig.size() - 1, 0);
 	vector<int> gg_temp;
 	vector<size_t> ig_temp;
 	vector<size_t> jg_temp(jg.size());
-	while (true)
+	 
+	fullWalk.push_back(0);
+	u[0] = 1;
+	d[0] = 0;
+	while (fullWalk.size() < N)
 	{
 		int  minN = -1;
 		int  minV = INT_MAX;
-		u[0] = 1;
-		d[0] = 0;
-		for (int i = 0; i < u.size(); i++)
+		for (int i = 0; i < fullWalk.size(); i++)
 		{
-			if (u[i])
-			{
-				size_t j = *(ig.begin() + i);
-				size_t J_end = *(ig.begin() + i + 1);
-
-				while (j < J_end)
-				{
-					if (minV > gg[j])
+			std::multiset<Point>::iterator it;
+				while (treeQ[fullWalk[i]].size() != 0){
+					it = treeQ[fullWalk[i]].begin();
+					if (!u[(*it).number_point])
 					{
-						if ((jg[j] != i) && (!u[jg[j]]))
+						if (((*it).weight < minV))
 						{
-							minV = gg[j];
-							minN = jg[j];
-							p[minN] = i;
+							minV = (*it).weight;
+							minN = fullWalk[i];
 						}
+						break;
 					}
-					j++;
-				}
-
-			}
+					treeQ[fullWalk[i]].erase(it);
+				} 
 		}
-
-		if (minN == -1)
-		{
-			break;
-		}
-		else
-		{
-			u[minN] = 1;
-			d[minN] = minV;
-		}
+		std::multiset<Point>::iterator it;
+		it = treeQ[minN].begin();
+		int k = (*it).number_point;
+		treeQ[minN].erase(it);
+		fullWalk.push_back(k);
+		p[k] = minN;
+		d[k] = minV;
+		u[k] = true;
 	}
+	
 }
+
 void PrimaSimpleDGPP::convert_to_str()
 {
-	ig.clear(); 
+	ig.clear();
 	gg.clear();
 	jg.clear();
 	ig.push_back(0);
@@ -66,17 +84,17 @@ void PrimaSimpleDGPP::convert_to_str()
 
 	for (int i = 1; i < p.size(); i++)
 	{
-		ig.push_back(ig[i] + count(p.begin(), p.end(), i) + 1 );
+		ig.push_back(ig[i] + count(p.begin(), p.end(), i) + 1);
 	}
 
-	gg = vector<int>(ig[ig.size()  - 1]);
+	gg = vector<int>(ig[ig.size() - 1]);
 	jg = vector<size_t>(ig[ig.size() - 1]);
-	vector<size_t>  tempPos (p.size(), 0);
+	vector<size_t>  tempPos(p.size(), 0);
 	for (int i = 1; i < p.size(); i++)
 	{
 		if (p[i] != -1)
 		{
-			gg[ig[p[i]] + tempPos[p[i]]] = d[i]; 
+			gg[ig[p[i]] + tempPos[p[i]]] = d[i];
 			jg[ig[p[i]] + tempPos[p[i]]] = i;
 			tempPos[p[i]]++;
 
@@ -99,7 +117,7 @@ void PrimaSimpleDGPP::convert_to_str()
 			{
 				if (jg[l] < jg[min])
 				{
-					
+
 					int tempIndJ = jg[l];
 					int tempIndG = gg[l];
 					jg[l] = jg[min];
@@ -109,10 +127,27 @@ void PrimaSimpleDGPP::convert_to_str()
 					min = l;
 				}
 			}
-
-
-			
 		}
 	}
+}
 
+void PrimaSimpleDGPP::clear()
+{
+	fullWalk.clear();
+	p.clear();
+	d.clear();
+	delete[] u;
+	treeQ.clear();
+}
+
+bool PrimaSimpleDGPP::Point::operator < (const PrimaSimpleDGPP::Point & t) const
+{
+	if (weight < t.weight) return true;
+	if (weight > t.weight) return false;
+	return false;
+}
+bool PrimaSimpleDGPP::Point::operator == (const PrimaSimpleDGPP::Point & t) const
+{
+	if (weight == t.weight) return true;
+	return false;
 }

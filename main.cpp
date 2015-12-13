@@ -134,15 +134,22 @@ void run_performance_tests(vector<test_info>& tests, ofstream& outp) {
     outp << typeid(test_subj_type).name() << ";" <<  endl;
     qDebug() << "Testing " << typeid(test_subj_type).name();
 
+
+    try {
    for(auto& test : tests) {
         qDebug() << "\t"  << test.test_name.c_str();
          BaseInterface* interface_class = new test_subj_type;
          double result = interface_class->run_performance_test(test.test_name);
          outp << test.test_v << ";" << test.test_e << ";" << result << endl;
 
+
          delete interface_class;
 
    }
+    }
+    catch(...) {
+        qDebug() << "ERROR at " << typeid(test_subj_type).name() << "!!!";
+    }
 
    outp << endl;
    outp.flush();
@@ -192,6 +199,7 @@ int main(int argc, char** argv)
     }
 
     ofstream outp("results.cvs");
+
 
     run_performance_tests<PrimaSimpleDGPP>(tests, outp);
     run_performance_tests<PrimaSimpleVKB>(tests, outp);
