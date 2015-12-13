@@ -46,7 +46,7 @@ void create_performance_test (int test_size_v, int test_size_e, QString test_typ
        int full_e = (test_size_v - 1)* test_size_v / 2;
        int e_i = 0;
 
-       qDebug() << "\t\tGenerating test " << test_size_v << " " << test_size_v;
+       qDebug() << "\t\tGenerating test " << test_size_v << " " << test_size_e;
        for(int i = 0; i < test_size_v; i++) {
            int row_edge_n = 0;
         for(int j = 0; j < test_size_v; j++) {
@@ -74,8 +74,8 @@ void create_performance_test (int test_size_v, int test_size_e, QString test_typ
                     pos_value = el->second;
                 }
                 else {
-                    bool add_edge;
-                    if(j == test_size_v - 1 && row_edge_n == 0) {
+                    bool add_edge = false;
+                    if(j == test_size_v - 1 && row_edge_n == 0 || j == i + 1) {
                          add_edge = true;
                        //  qDebug() << "\t\tZero row i = " << i << " j = " << j << " row_count = " << row_edge_n;
                     }
@@ -135,21 +135,21 @@ void run_performance_tests(vector<test_info>& tests, ofstream& outp) {
     qDebug() << "Testing " << typeid(test_subj_type).name();
 
 
-    try {
-   for(auto& test : tests) {
-        qDebug() << "\t"  << test.test_name.c_str();
-         BaseInterface* interface_class = new test_subj_type;
-         double result = interface_class->run_performance_test(test.test_name);
-         outp << test.test_v << ";" << test.test_e << ";" << result << endl;
+   try {
+       for(auto& test : tests) {
+            qDebug() << "\t"  << test.test_name.c_str();
+             BaseInterface* interface_class = new test_subj_type;
+             double result = interface_class->run_performance_test(test.test_name);
+             outp << test.test_v << ";" << test.test_e << ";" << result << endl;
 
 
-         delete interface_class;
+             delete interface_class;
 
+       }
    }
-    }
-    catch(...) {
-        qDebug() << "ERROR at " << typeid(test_subj_type).name() << "!!!";
-    }
+   catch(...) {
+       qDebug() << "ERROR at " << typeid(test_subj_type).name() << "!!!";
+   }
 
    outp << endl;
    outp.flush();
@@ -206,7 +206,7 @@ int main(int argc, char** argv)
     run_performance_tests<PrimaSimpleVSSS>(tests, outp);
 
 
-    run_performance_tests<PrimaBinTreeDGPP>(tests, outp);
+//    run_performance_tests<PrimaBinTreeDGPP>(tests, outp);
     run_performance_tests<PrimaBinTreeVKB>(tests, outp);
     run_performance_tests<PrimaBinTreeVSSS>(tests, outp);
 
